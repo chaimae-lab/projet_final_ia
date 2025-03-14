@@ -19,4 +19,4 @@ def recuperer_criteres(request, critere_id):
 #   Générer un plan de voyage
 
 
-# Récupérer un plan généré
+#    Récupérer un plan généré

@@ -1,16 +1,13 @@
 
 
 from django.contrib import admin
-from .models import Pays, Ville, Adresse, ProfilVoyageur, Transport, Hebergement, Activite, TypeVoyage, CritereVoyage, PlanVoyage
+from .models import Pays, Ville, Adresse, ProfilVoyageur,  CritereVoyage, PlanVoyage
 
 # Enregistrer les modèles de base
 admin.site.register(Pays)
 admin.site.register(Ville)
 admin.site.register(Adresse)
-admin.site.register(Transport)
-admin.site.register(Hebergement)
-admin.site.register(Activite)
-admin.site.register(TypeVoyage)
+
 
 # Enregistrer ProfilVoyageur avec une configuration avancée
 @admin.register(ProfilVoyageur)
@@ -21,7 +18,7 @@ class ProfilVoyageurAdmin(admin.ModelAdmin):
 # Enregistrer CritereVoyage avec plus d'informations affichées
 @admin.register(CritereVoyage)
 class CritereVoyageAdmin(admin.ModelAdmin):
-    list_display = ('utilisateur', 'ville_depart', 'ville_destination', 'date_depart', 'date_retour', 'budget_total', 'date_creation')
+    list_display = ('utilisateur', 'date_depart', 'date_retour', 'budget_total', 'date_creation')
     search_fields = ('utilisateur__username', 'ville_depart__nom', 'ville_destination__nom')
     list_filter = ('date_depart', 'date_retour', 'type_voyage')
 

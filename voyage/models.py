@@ -23,55 +23,66 @@ class Adresse(models.Model):
 class ProfilVoyageur(models.Model):
     utilisateur = models.OneToOneField(User, on_delete=models.CASCADE)
     telephone = models.CharField(max_length=20, blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
     date_naissance = models.DateField(blank=True, null=True)
-    pays_favoris = models.ManyToManyField(Pays, blank=True)   # ManyToMany ,Chaque profil voyageur peut avoir plusieurs pays favoris(nouveau table generer automatique ).
+    
 
 
-class Transport(models.Model):
-    type_transport = models.CharField(max_length=50)
-    compagnie = models.CharField(max_length=100, blank=True, null=True)
-    confort = models.CharField(max_length=50, blank=True, null=True)
-
-
-class Hebergement(models.Model):
-    nom = models.CharField(max_length=100)
-    adresse = models.CharField(max_length=200, null=True, blank=True)
-    type_hebergement = models.CharField(max_length=50, blank=True, null=True)
-    etoiles = models.PositiveIntegerField(null=True, blank=True)
-
-
-class Activite(models.Model):
-    nom = models.CharField(max_length=50)
-    description = models.TextField(blank=True, null=True)
-    prix = models.DecimalField(max_digits=10, decimal_places=2)
 
 
 class TypeVoyage(models.Model):
-    nom = models.CharField(max_length=50, unique=True)
+    nom = models.CharField(max_length=50, unique=True)   # LISTE 
     description = models.TextField(blank=True, null=True)
+
+
 
 
 
 class CritereVoyage(models.Model):
+    class TypeVoyage(models.TextChoices):
+        LOISIR = 'loisir', 'Loisir'
+        AFFAIRES = 'affaires', 'Affaires'
+        FAMILIAL = 'familial', 'Familial'
+        CULTUREL = 'culturel', 'Culturel'
+        AVENTURE = 'aventure', 'Aventure'
+        ROMANTIQUE = 'romantique', 'Romantique'
+        RELIGIEUX = 'religieux', 'Religieux'
+        ETUDES = 'etudes', 'Études'
+        AUTRE = 'autre', 'Autre'
+
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
-    pays_depart = models.ForeignKey(Pays, related_name='pays_depart_voyages', on_delete=models.CASCADE)
-    pays_arrivee = models.ForeignKey(Pays, related_name='pays_arrivee_voyages', on_delete=models.CASCADE)
-    ville_depart = models.ForeignKey(Ville, related_name='depart_voyages', on_delete=models.CASCADE)
-    ville_destination = models.ForeignKey(Ville, related_name='destination_voyages', on_delete=models.CASCADE)
-    adresse_depart = models.ForeignKey(Adresse, related_name='adresse_depart_voyages', on_delete=models.SET_NULL, null=True, blank=True)
-    adresse_arrivee = models.ForeignKey(Adresse, related_name='adresse_arrivee_voyages', on_delete=models.SET_NULL, null=True, blank=True)
+    pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') #liste  ,9atlk plusier pas f7ala pys visite (ANBDL LA RELATION)
+    ville_destination = models.ManyToManyField(Ville, related_name='destination_voyages') #liste   plusieur pas visite  (ANBDL LA RELATION )
+    adresse_depart = models.ForeignKey(Adresse, related_name='adresse_depart_voyages', on_delete=models.SET_NULL, null=True, blank=True)  
     date_depart = models.DateField()
     date_retour = models.DateField()
     budget_total = models.DecimalField(max_digits=10, decimal_places=2)
-    nombre_voyageurs = models.PositiveIntegerField()
-    type_voyage = models.ForeignKey(TypeVoyage, null=True, on_delete=models.SET_NULL)
-    moyen_transport_prefere = models.ForeignKey(Transport, null=True, on_delete=models.SET_NULL)
-    hebergement_prefere = models.ForeignKey(Hebergement, null=True, on_delete=models.SET_NULL)
-    activites_souhaitees = models.ManyToManyField(Activite)  # ManyToMany  nouveau table
+    type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices,default=TypeVoyage.AUTRE )# liste 
     date_creation = models.DateTimeField(auto_now_add=True)
+    #tranche d'age appel 
+    @property   
+    def tranches_age(self):
+        return self.tranches_age_voyageurs.all()
 
 
+
+
+
+#   model tranche d'age 
+
+class TrancheAgeVoyageur(models.Model):
+         #enum
+    class NomTranche(models.TextChoices):
+        ENFANT = 'enfant', 'Enfant (0-12 ans)'
+        JEUNE = 'jeune', 'Jeune (13-25 ans)'
+        ADULTE = 'adulte', 'Adulte (26-60 ans)'
+        SENIOR = 'senior', 'Senior (+60 ans)'
+
+
+    critere_voyage = models.ForeignKey(CritereVoyage,related_name='tranches_age_voyageurs',on_delete=models.CASCADE ) # Chaque voyage (CritereVoyage) peut avoir plusieurs lignes différentes (une par tranche d’âge)
+    tranche_age = models.CharField( max_length=20, choices=NomTranche.choices )
+    nombre_voyageurs = models.PositiveIntegerField(default=1)
+
+    
 
 class PlanVoyage(models.Model):
     critere_voyage = models.ForeignKey(CritereVoyage, on_delete=models.CASCADE)
