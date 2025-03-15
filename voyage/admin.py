@@ -1,13 +1,13 @@
 
 
 from django.contrib import admin
-from .models import Pays, Ville, Adresse, ProfilVoyageur,  CritereVoyage, PlanVoyage
+from .models import Pays, Ville, Adresse, ProfilVoyageur,  CritereVoyage, TrancheAgeVoyageur ,PlanVoyage
 
 # Enregistrer les modèles de base
 admin.site.register(Pays)
 admin.site.register(Ville)
 admin.site.register(Adresse)
-
+admin.site.register(TrancheAgeVoyageur) 
 
 # Enregistrer ProfilVoyageur avec une configuration avancée
 @admin.register(ProfilVoyageur)

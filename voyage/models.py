@@ -29,9 +29,7 @@ class ProfilVoyageur(models.Model):
 
 
 
-class TypeVoyage(models.Model):
-    nom = models.CharField(max_length=50, unique=True)   # LISTE 
-    description = models.TextField(blank=True, null=True)
+
 
 
 
