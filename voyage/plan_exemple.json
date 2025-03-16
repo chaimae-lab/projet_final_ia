@@ -1,0 +1,178 @@
+
+{
+    "voyage": {
+      "destination": "Paris, France",
+      "dates": "02/04/2025 - 10/04/2025",
+      "type": "Culturel",
+      "voyageur": {
+        "nombre_voyageurs": 2,
+        "tranche_age": "Adulte (26-60 ans)",
+        "age_moyen": 24
+      }
+    },
+    "itineraire": [
+      {
+        "jour": 1,
+        "date": "02/04/2025",
+        "activites": [
+          {
+            "nom": "Arrivée à Paris et installation à l'hôtel",
+            "heure_debut": "14:00",
+            "heure_fin": "15:30",
+            "duree": "1h30",
+            "description": "Check-in à l'hôtel et installation dans la chambre."
+          },
+          {
+            "temps_deplacement": "30 min"
+          },
+          {
+            "nom": "Exploration du Quartier Latin",
+            "heure_debut": "16:00",
+            "heure_fin": "18:00",
+            "duree": "2h",
+            "description": "Découverte du Panthéon, de la Sorbonne et des ruelles historiques."
+          },
+          {
+            "temps_deplacement": "15 min"
+          },
+          {
+            "nom": "Dîner dans un restaurant typique",
+            "heure_debut": "19:00",
+            "heure_fin": "21:00",
+            "duree": "2h",
+            "description": "Dégustation de cuisine française dans un restaurant du Quartier Latin."
+          }
+        ]
+      },
+      {
+        "jour": 2,
+        "date": "03/04/2025",
+        "activites": [
+          {
+            "nom": "Visite du Musée du Louvre",
+            "heure_debut": "09:00",
+            "heure_fin": "12:00",
+            "duree": "3h",
+            "description": "Découverte des chefs-d'œuvre tels que la Joconde et la Vénus de Milo."
+          },
+          {
+            "temps_deplacement": "10 min"
+          },
+          {
+            "nom": "Déjeuner au Café Marly",
+            "heure_debut": "12:15",
+            "heure_fin": "13:30",
+            "duree": "1h15",
+            "description": "Déjeuner avec vue sur la pyramide du Louvre."
+          },
+          {
+            "temps_deplacement": "15 min"
+          },
+          {
+            "nom": "Balade sur les Champs-Élysées",
+            "heure_debut": "14:00",
+            "heure_fin": "16:00",
+            "duree": "2h",
+            "description": "Flânerie et shopping sur la plus belle avenue du monde."
+          },
+          {
+            "temps_deplacement": "15 min"
+          },
+          {
+            "nom": "Visite de l'Arc de Triomphe",
+            "heure_debut": "16:15",
+            "heure_fin": "17:30",
+            "duree": "1h15",
+            "description": "Montée au sommet pour une vue panoramique de Paris."
+          },
+          {
+            "temps_deplacement": "20 min"
+          },
+          {
+            "nom": "Dîner croisière sur la Seine",
+            "heure_debut": "19:00",
+            "heure_fin": "21:30",
+            "duree": "2h30",
+            "description": "Dîner gastronomique à bord d'un bateau-mouche avec vue sur Paris illuminé."
+          }
+        ]
+      },
+      {
+        "jour": 3,
+        "date": "04/04/2025",
+        "activites": [
+          {
+            "nom": "Visite de la Tour Eiffel",
+            "heure_debut": "09:00",
+            "heure_fin": "11:00",
+            "duree": "2h",
+            "description": "Ascension jusqu'au sommet et vue panoramique sur Paris."
+          },
+          {
+            "temps_deplacement": "20 min"
+          },
+          {
+            "nom": "Déjeuner au restaurant 58 Tour Eiffel",
+            "heure_debut": "12:00",
+            "heure_fin": "13:30",
+            "duree": "1h30",
+            "description": "Déjeuner avec une vue exceptionnelle sur la ville."
+          },
+          {
+            "temps_deplacement": "30 min"
+          },
+          {
+            "nom": "Découverte du Musée d'Orsay",
+            "heure_debut": "14:30",
+            "heure_fin": "17:00",
+            "duree": "2h30",
+            "description": "Exploration des chefs-d'œuvre impressionnistes."
+          },
+          {
+            "temps_deplacement": "15 min"
+          },
+          {
+            "nom": "Soirée au Moulin Rouge",
+            "heure_debut": "20:00",
+            "heure_fin": "22:30",
+            "duree": "2h30",
+            "description": "Dîner-spectacle dans le célèbre cabaret parisien."
+          }
+        ]
+      },
+      {
+        "jour": 4,
+        "date": "05/04/2025",
+        "activites": [
+          {
+            "nom": "Excursion au Château de Versailles",
+            "heure_debut": "09:00",
+            "heure_fin": "14:00",
+            "duree": "5h",
+            "description": "Visite du château et des jardins de Versailles."
+          },
+          {
+            "temps_deplacement": "45 min"
+          },
+          {
+            "nom": "Déjeuner à La Petite Venise",
+            "heure_debut": "14:15",
+            "heure_fin": "15:30",
+            "duree": "1h15",
+            "description": "Déjeuner dans un cadre idyllique à Versailles."
+          },
+          {
+            "temps_deplacement": "45 min"
+          },
+          {
+            "nom": "Retour à Paris et shopping au Printemps Haussmann",
+            "heure_debut": "17:00",
+            "heure_fin": "19:00",
+            "duree": "2h",
+            "description": "Séance shopping dans l'un des plus grands magasins de Paris."
+          }
+        ]
+      }
+    ]
+  }
+  

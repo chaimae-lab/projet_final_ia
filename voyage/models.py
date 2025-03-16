@@ -86,3 +86,41 @@ class PlanVoyage(models.Model):
     critere_voyage = models.ForeignKey(CritereVoyage, on_delete=models.CASCADE)
     contenu_plan = models.JSONField()  # Stocke le plan sous format JSON
     date_creation = models.DateTimeField(auto_now_add=True)
+
+
+
+#  les tables pour deviser le plan 
+
+
+#  Modèle Voyage (lié à CritereVoyage)
+class Voyage(models.Model):
+    critere = models.ForeignKey("CritereVoyage", on_delete=models.CASCADE, related_name="voyages")
+    destination = models.CharField(max_length=255)
+    type_voyage = models.CharField(max_length=50)
+    date_depart = models.DateField()
+    date_retour = models.DateField()
+
+
+#  Modèle Itinéraire (lié à Voyage)
+class Itineraire(models.Model):
+    voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE, related_name="itineraire")
+    jour = models.IntegerField()
+    date = models.DateField()
+
+
+# Modèle Activité (lié à Itinéraire)
+class Activite(models.Model):
+    itineraire = models.ForeignKey(Itineraire, on_delete=models.CASCADE, related_name="activites")
+    nom = models.CharField(max_length=255)
+    heure_debut = models.TimeField()
+    heure_fin = models.TimeField()
+    duree = models.CharField(max_length=50)
+    description = models.TextField()
+
+
+#  Modèle Déplacement (lié à Itinéraire)
+class Deplacement(models.Model):
+    itineraire = models.ForeignKey(Itineraire, on_delete=models.CASCADE, related_name="deplacements")
+    temps_deplacement = models.CharField(max_length=50)
+
+    
