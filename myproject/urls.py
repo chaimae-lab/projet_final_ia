@@ -17,12 +17,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import path, include  # Assure-toi que include est bien importé !
-from voyage.views import recuperer_plan_voyage
+#from voyage.views import recuperer_plan_voyage
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('voyage.url_voyage')),  # Lien vers voyage/url_voyage.py
-    path('api/plan-voyage/<int:voyage_id>/', recuperer_plan_voyage, name='recuperer_plan_voyage'),
+    #path('api/plan-voyage/<int:voyage_id>/', recuperer_plan_voyage, name='recuperer_plan_voyage'),
 ]
 

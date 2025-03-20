@@ -2,33 +2,14 @@ import requests
 from django.conf import settings
 
 import json
-
-
-
 from datetime import date
 
-#  Fonction pour calculer l'âge à partir de la date de naissance
-def calculer_age(date_naissance):
-    if not date_naissance:
-        return "Non spécifié"
-    
-    today = date.today()
-    age = today.year - date_naissance.year - ((today.month, today.day) < (date_naissance.month, date_naissance.day))
-    return age
-
-
-
-#   Générer prompt 
-
-
+# Fonction pour générer le prompt
 def generer_prompt(critere):
     destinations = ', '.join([ville.nom for ville in critere.ville_destination.all()])
     pays = ', '.join({ville.pays.nom for ville in critere.ville_destination.all()})
     adresse_depart = critere.adresse_depart.rue if critere.adresse_depart else "Non spécifié"
-    # ✅ Récupérer l'âge du voyageur depuis `ProfilVoyageur`
-    profil_voyageur = getattr(critere.utilisateur, "profilvoyageur", None)
-    age_voyageur = calculer_age(profil_voyageur.date_naissance) if profil_voyageur and profil_voyageur.date_naissance else "Non spécifié"
-    
+
     tranches_age = [
         {
             "tranche": t.get_tranche_age_display(),
@@ -45,10 +26,7 @@ def generer_prompt(critere):
             "adresse_depart": adresse_depart,
             "dates_voyage": f"de {critere.date_depart} à {critere.date_retour}",
             "type_voyage": critere.get_type_voyage_display(),
-            "nombre_voyageurs": tranches_age if tranches_age else "Non spécifié",
-            "age_voyageur": age_voyageur
-            
-
+            "nombre_voyageurs": tranches_age if tranches_age else "Non spécifié"
         },
         "instructions": {
             "planification": "Génère un plan détaillé jour par jour.",
@@ -56,7 +34,7 @@ def generer_prompt(critere):
                 "Nom de l'activité",
                 "Heure de début et heure de fin",
                 "Durée de chaque activité",
-                "Temps estimé entre chaque activité"
+                "Budget de chaque activité"  
             ],
             "contraintes": [
                 f"Respecter les préférences liées au type de voyage : {critere.get_type_voyage_display()}",
@@ -74,7 +52,7 @@ def generer_prompt(critere):
                         "heure_fin": "HH:MM",
                         "duree": "X min",
                         "description": "Détails sur l'activité",
-                        "temps_deplacement": "X min"
+                        "budget": "XX.XX EUR"  
                     }
                 ]
             },
@@ -87,7 +65,7 @@ def generer_prompt(critere):
                         "heure_fin": "HH:MM",
                         "duree": "X min",
                         "description": "Détails sur l'activité",
-                        "temps_deplacement": "X min"
+                        "budget": "XX.XX EUR"  
                     }
                 ]
             }

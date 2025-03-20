@@ -1,79 +1,65 @@
+
 import json
 from datetime import datetime
-from voyage.models import CritereVoyage, Voyage, Itineraire, Activite, Deplacement
+from voyage.models import CritereVoyage, JourVoyage, Activite
 
+
+
+
+#sauvgarder plan dans la base de donnes 
 def convertir_date(date_str):
-    """ Convertir les dates au format YYYY-MM-DD """
+    """ Convertir une date en format YYYY-MM-DD """
     try:
-        print(f" Conversion de la date : {date_str}")  
         return datetime.strptime(date_str, "%d/%m/%Y").strftime("%Y-%m-%d")
     except ValueError:
-        print(f"Erreur : Format de date invalide -> {date_str}")  
-        return None  
+        return None
 
-def sauvegarder_plan(critere_id, plan_json):
+def sauvegarder_plan(critere_id, fichier_json):
     """
-    Sauvegarde un plan de voyage en base de données en le répartissant sur plusieurs tables.
+    Sauvegarde un plan de voyage dans la base de données.
     """
     try:
+        # Charger le fichier JSON
+        with open(fichier_json, "r", encoding="utf-8") as file:
+            plan_data = json.load(file)
+
+        # Vérifier que le critère de voyage existe
         critere = CritereVoyage.objects.get(id=critere_id)
-        plan_data = json.loads(plan_json)
 
-        # ✅ Convertir la date de départ et de retour
-        date_depart = convertir_date(plan_data["voyage"]["dates"].split(" - ")[0])
-        date_retour = convertir_date(plan_data["voyage"]["dates"].split(" - ")[1])
-
-        if not date_depart or not date_retour:
-            return " Erreur : Format de date invalide dans les dates de voyage."
-
-        # ✅ Créer l'entrée Voyage
-        voyage = Voyage.objects.create(
-            critere=critere,
-            destination=plan_data["voyage"]["destination"],
-            type_voyage=plan_data["voyage"]["type"],
-            date_depart=date_depart,
-            date_retour=date_retour
-        )
-        print(f"✅ Voyage créé : {voyage.destination} ({date_depart} - {date_retour})")  
-
-        # ✅ Ajouter chaque jour dans Itinéraire
+        # Parcourir l'itinéraire et enregistrer les jours et activités
         for jour in plan_data["itineraire"]:
-            print(f"🔄 Enregistrement du Jour {jour['jour']} - {jour['date']}")  
-
             date_jour = convertir_date(jour["date"])
             if not date_jour:
-                print(f"⚠️ Erreur format date pour {jour['jour']}")  
-                continue  
+                print(f"⚠️ Date invalide pour Jour {jour['jour']}, ignoré.")
+                continue
 
-            itineraire = Itineraire.objects.create(
-                voyage=voyage,
+            # Enregistrer le jour de voyage
+            jour_voyage, created = JourVoyage.objects.get_or_create(
+                critere_voyage=critere,
                 jour=jour["jour"],
                 date=date_jour
             )
 
-            # ✅ Ajouter les activités et les déplacements
+            # Enregistrer les activités pour ce jour
             for activite in jour["activites"]:
-                if "nom" in activite:  # Vérifier si c'est bien une activité
-                    print(f"   ✅ Ajout Activité : {activite['nom']}")  
+                if "nom" in activite:  # Vérifier si c'est une activité
                     Activite.objects.create(
-                        itineraire=itineraire,
+                        jour_voyage=jour_voyage,
                         nom=activite["nom"],
                         heure_debut=activite["heure_debut"],
                         heure_fin=activite["heure_fin"],
                         duree=activite["duree"],
+                        prix=activite.get("budget", None),  # Récupérer le prix s'il existe
                         description=activite["description"]
                     )
+                    print(f"✅ Activité enregistrée : {activite['nom']} - {date_jour}")
                 else:
-                    print(f"    Ajout Déplacement : {activite['temps_deplacement']}")  
-                    Deplacement.objects.create(
-                        itineraire=itineraire,
-                        temps_deplacement=activite["temps_deplacement"]
-                    )
+                    print(f"⚠️ Activité ignorée car non valide : {activite}")
 
-        return f" PlanVoyage enregistré avec succès pour {voyage.destination}"
+        return "✅ Plan de voyage enregistré avec succès !"
 
     except CritereVoyage.DoesNotExist:
-        return " Erreur : Aucun CritereVoyage trouvé avec cet ID."
+        return f"❌ Erreur : Aucun CritereVoyage trouvé avec ID {critere_id}."
 
     except Exception as e:
-        return f" Erreur lors de l'enregistrement du plan : {str(e)}"
+        return f"❌ Erreur lors de l'enregistrement du plan : {str(e)}"

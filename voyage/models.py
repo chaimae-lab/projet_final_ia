@@ -18,9 +18,9 @@ class Adresse(models.Model):
     ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
 
 
+   # Modèle Voyageur (ancien ProfilVoyageur)
     
-    
-class ProfilVoyageur(models.Model):
+class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas le rennomer user 
     utilisateur = models.OneToOneField(User, on_delete=models.CASCADE)
     telephone = models.CharField(max_length=20, blank=True, null=True)
     date_naissance = models.DateField(blank=True, null=True)
@@ -44,17 +44,16 @@ class CritereVoyage(models.Model):
         AVENTURE = 'aventure', 'Aventure'
         ROMANTIQUE = 'romantique', 'Romantique'
         RELIGIEUX = 'religieux', 'Religieux'
-        ETUDES = 'etudes', 'Études'
-        AUTRE = 'autre', 'Autre'
+        
 
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
-    pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') #liste  ,9atlk plusier pas f7ala pys visite (ANBDL LA RELATION)
-    ville_destination = models.ManyToManyField(Ville, related_name='destination_voyages') #liste   plusieur pas visite  (ANBDL LA RELATION )
+    pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages')
+    ville_destination = models.ManyToManyField(Ville, related_name='destination_voyages') 
     adresse_depart = models.ForeignKey(Adresse, related_name='adresse_depart_voyages', on_delete=models.SET_NULL, null=True, blank=True)  
     date_depart = models.DateField()
     date_retour = models.DateField()
     budget_total = models.DecimalField(max_digits=10, decimal_places=2)
-    type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices,default=TypeVoyage.AUTRE )# liste 
+    type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices)# liste 
     date_creation = models.DateTimeField(auto_now_add=True)
     #tranche d'age appel 
     @property   
@@ -76,7 +75,7 @@ class TrancheAgeVoyageur(models.Model):
         SENIOR = 'senior', 'Senior (+60 ans)'
 
 
-    critere_voyage = models.ForeignKey(CritereVoyage,related_name='tranches_age_voyageurs',on_delete=models.CASCADE ) # Chaque voyage (CritereVoyage) peut avoir plusieurs lignes différentes (une par tranche d’âge)
+    critere_voyage = models.ForeignKey(CritereVoyage,related_name='tranches_age_voyageurs',on_delete=models.CASCADE ) # un CritereVoyage peut être lié à plusieurs objets de ce modèle
     tranche_age = models.CharField( max_length=20, choices=NomTranche.choices )
     nombre_voyageurs = models.PositiveIntegerField(default=1)
 
@@ -92,35 +91,22 @@ class PlanVoyage(models.Model):
 #  les tables pour deviser le plan 
 
 
-#  Modèle Voyage (lié à CritereVoyage)
-class Voyage(models.Model):
-    critere = models.ForeignKey("CritereVoyage", on_delete=models.CASCADE, related_name="voyages")
-    destination = models.CharField(max_length=255)
-    type_voyage = models.CharField(max_length=50)
-    date_depart = models.DateField()
-    date_retour = models.DateField()
 
 
-#  Modèle Itinéraire (lié à Voyage)
-class Itineraire(models.Model):
-    voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE, related_name="itineraire")
+ 
+class JourVoyage(models.Model):
+    critere_voyage = models.ForeignKey(CritereVoyage, on_delete=models.CASCADE, related_name="jour")
     jour = models.IntegerField()
     date = models.DateField()
 
-
-# Modèle Activité (lié à Itinéraire)
 class Activite(models.Model):
-    itineraire = models.ForeignKey(Itineraire, on_delete=models.CASCADE, related_name="activites")
+    jour_voyage = models.ForeignKey(JourVoyage, on_delete=models.CASCADE, related_name="activites", null=True, blank=True)
     nom = models.CharField(max_length=255)
     heure_debut = models.TimeField()
     heure_fin = models.TimeField()
     duree = models.CharField(max_length=50)
+    prix = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)  
     description = models.TextField()
 
-
-#  Modèle Déplacement (lié à Itinéraire)
-class Deplacement(models.Model):
-    itineraire = models.ForeignKey(Itineraire, on_delete=models.CASCADE, related_name="deplacements")
-    temps_deplacement = models.CharField(max_length=50)
 
     

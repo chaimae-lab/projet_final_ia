@@ -1,0 +1,61 @@
+
+
+
+{
+  "user_request": "Organiser un voyage personnalisé",
+  "details": {
+    "destinations": "Paris",
+    "pays": "France",
+    "adresse_depart": "12 Avenue Hassan II",
+    "dates_voyage": "de 2025-04-02 à 2025-04-10",
+    "type_voyage": "Culturel",
+    "nombre_voyageurs": [
+      {
+        "tranche": "Adulte (26-60 ans)",
+        "nombre_voyageurs": 2
+      }
+    ]
+  },
+  "instructions": {
+    "planification": "Génère un plan détaillé jour par jour.",
+    "details_activites": [
+      "Nom de l'activité",
+      "Heure de début et heure de fin",
+      "Durée de chaque activité",
+      "Budget de chaque activité"
+    ],
+    "contraintes": [
+      "Respecter les préférences liées au type de voyage : Culturel",
+      "Optimiser le temps de trajet",
+      "Fournir des alternatives en cas de mauvaise météo"
+    ]
+  },
+  "format_attendu": {
+    "jour1": {
+      "date": "JJ/MM/AAAA",
+      "activites": [
+        {
+          "nom": "Activité 1",
+          "heure_debut": "HH:MM",
+          "heure_fin": "HH:MM",
+          "duree": "X min",
+          "description": "Détails sur l'activité",
+          "budget": "XX.XX EUR"
+        }
+      ]
+    },
+    "jour2": {
+      "date": "JJ/MM/AAAA",
+      "activites": [
+        {
+          "nom": "Activité 2",
+          "heure_debut": "HH:MM",
+          "heure_fin": "HH:MM",
+          "duree": "X min",
+          "description": "Détails sur l'activité",
+          "budget": "XX.XX EUR"
+        }
+      ]
+    }
+  }
+}
