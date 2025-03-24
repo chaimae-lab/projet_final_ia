@@ -1,12 +1,7 @@
-
 import json
 from datetime import datetime
 from voyage.models import CritereVoyage, JourVoyage, Activite
 
-
-
-
-#sauvgarder plan dans la base de donnes 
 def convertir_date(date_str):
     """ Convertir une date en format YYYY-MM-DD """
     try:
@@ -16,7 +11,7 @@ def convertir_date(date_str):
 
 def sauvegarder_plan(critere_id, fichier_json):
     """
-    Sauvegarde un plan de voyage dans la base de données.
+    Sauvegarde un plan de voyage dans la base de données sans doublons.
     """
     try:
         # Charger le fichier JSON
@@ -33,28 +28,38 @@ def sauvegarder_plan(critere_id, fichier_json):
                 print(f"⚠️ Date invalide pour Jour {jour['jour']}, ignoré.")
                 continue
 
-            # Enregistrer le jour de voyage
-            jour_voyage, created = JourVoyage.objects.get_or_create(
+            # Créer ou récupérer le jour de voyage
+            jour_voyage, _ = JourVoyage.objects.get_or_create(
                 critere_voyage=critere,
                 jour=jour["jour"],
                 date=date_jour
             )
 
-            # Enregistrer les activités pour ce jour
+            # Enregistrer les activités si elles n'existent pas déjà
             for activite in jour["activites"]:
-                if "nom" in activite:  # Vérifier si c'est une activité
-                    Activite.objects.create(
+                if "nom" in activite:
+                    existe = Activite.objects.filter(
                         jour_voyage=jour_voyage,
                         nom=activite["nom"],
                         heure_debut=activite["heure_debut"],
-                        heure_fin=activite["heure_fin"],
-                        duree=activite["duree"],
-                        prix=activite.get("budget", None),  # Récupérer le prix s'il existe
-                        description=activite["description"]
-                    )
-                    print(f"✅ Activité enregistrée : {activite['nom']} - {date_jour}")
+                        heure_fin=activite["heure_fin"]
+                    ).exists()
+
+                    if not existe:
+                        Activite.objects.create(
+                            jour_voyage=jour_voyage,
+                            nom=activite["nom"],
+                            heure_debut=activite["heure_debut"],
+                            heure_fin=activite["heure_fin"],
+                            duree=activite["duree"],
+                            prix=activite.get("budget", None),
+                            description=activite["description"]
+                        )
+                        print(f"✅ Activité enregistrée : {activite['nom']} - {date_jour}")
+                    else:
+                        print(f"⚠️ Activité déjà existante : {activite['nom']} - {date_jour}")
                 else:
-                    print(f"⚠️ Activité ignorée car non valide : {activite}")
+                    print(f"⚠️ Activité ignorée (structure invalide) : {activite}")
 
         return "✅ Plan de voyage enregistré avec succès !"
 
