@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Pays(models.Model):
+class Pays(models.Model):      
     nom = models.CharField(max_length=100)
 
 
@@ -12,7 +12,7 @@ class Ville(models.Model):
     pays = models.ForeignKey(Pays, on_delete=models.CASCADE) # Chaque ville est associée à un seul pays.
 
 
-class Adresse(models.Model):
+class Adresse(models.Model):   # supp relation ville 
     rue = models.CharField(max_length=200)
     code_postal = models.CharField(max_length=20, null=True, blank=True)
     ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
@@ -36,7 +36,7 @@ class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas
 
 
 class CritereVoyage(models.Model):
-    class TypeVoyage(models.TextChoices):
+    class TypeVoyage(models.TextChoices):    # liste f front 
         LOISIR = 'loisir', 'Loisir'
         AFFAIRES = 'affaires', 'Affaires'
         FAMILIAL = 'familial', 'Familial'
@@ -47,7 +47,7 @@ class CritereVoyage(models.Model):
         
 
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
-    pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages')
+    pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') # champs normal 
     ville_destination = models.ManyToManyField(Ville, related_name='destination_voyages') 
     adresse_depart = models.ForeignKey(Adresse, related_name='adresse_depart_voyages', on_delete=models.SET_NULL, null=True, blank=True)  
     date_depart = models.DateField()
@@ -56,6 +56,7 @@ class CritereVoyage(models.Model):
     type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices)# liste 
     date_creation = models.DateTimeField(auto_now_add=True)
     #tranche d'age appel 
+    #ligne normal 
     @property   
     def tranches_age(self):
         return self.tranches_age_voyageurs.all()
@@ -89,8 +90,6 @@ class PlanVoyage(models.Model):
 
 
 #  les tables pour deviser le plan 
-
-
 
 
  

@@ -24,5 +24,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('voyage.url_voyage')),  # Lien vers voyage/url_voyage.py
     #path('api/plan-voyage/<int:voyage_id>/', recuperer_plan_voyage, name='recuperer_plan_voyage'),
+    
 ]
 
