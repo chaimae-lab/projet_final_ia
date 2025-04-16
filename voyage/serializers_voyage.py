@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import CritereVoyage
-from .models import Pays, Ville
+from .models import Pays, Ville , Adresse
 
 class CritereVoyageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,3 +20,9 @@ class PaysSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pays
         fields = ['id', 'nom', 'villes']
+
+
+class AdresseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Adresse
+        fields = ['id', 'rue', 'code_postal', 'ville']

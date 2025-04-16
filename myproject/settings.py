@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
      'voyage',
+     'corsheaders',
     
 ]
 
@@ -50,7 +51,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
 
 ROOT_URLCONF = 'myproject.urls'
 
@@ -134,3 +138,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DEEPSEEK_API_KEY = "sk-76a02df4c3004d069077407bd6feaddf" 
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
+
+
+# Et ajoute cette ligne pour autoriser toutes les origines (React, Postman, etc.)
+CORS_ALLOW_ALL_ORIGINS = True  

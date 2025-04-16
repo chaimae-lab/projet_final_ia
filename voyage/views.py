@@ -8,8 +8,12 @@ from .serializers_voyage  import CritereVoyageSerializer
 
 from voyage.models import  JourVoyage ,Activite 
 
-from .models import Pays, Ville
-from .serializers_voyage  import PaysSerializer, VilleSerializer
+from .models import Pays, Ville ,Adresse
+
+from .serializers_voyage  import PaysSerializer, VilleSerializer ,AdresseSerializer
+
+
+
 
 
 
@@ -22,7 +26,7 @@ def recuperer_criteres(request, critere_id):
     return Response(serializer.data)
 
 
-#  consommer api 
+#  get api 
 
 class PaysList(APIView):
     def get(self, request):
@@ -34,4 +38,16 @@ class VilleList(APIView):
     def get(self, request, pays_nom):
         villes = Ville.objects.filter(pays__nom=pays_nom)
         serializer = VilleSerializer(villes, many=True)
+        return Response(serializer.data)
+    
+
+class AdresseList(APIView):
+    def get(self, request, ville_nom):
+        # Récupérer toutes les adresses associées à la ville spécifiée
+        adresses = Adresse.objects.filter(ville__nom=ville_nom)
+        
+        # Sérialiser les données des adresses
+        serializer = AdresseSerializer(adresses, many=True)
+        
+        # Retourner la réponse avec les adresses sérialisées
         return Response(serializer.data)
