@@ -12,7 +12,7 @@ class Ville(models.Model):
     pays = models.ForeignKey(Pays, on_delete=models.CASCADE) # Chaque ville est associée à un seul pays.
 
 
-class Adresse(models.Model):   # supp relation ville 
+class Adresse(models.Model):   # supp relation ville ,, adresse de depart 
     rue = models.CharField(max_length=200)
     code_postal = models.CharField(max_length=20, null=True, blank=True)
     ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
@@ -47,13 +47,13 @@ class CritereVoyage(models.Model):
         
 
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
-    pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') # champs normal 
+    pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') 
     ville_destination = models.ManyToManyField(Ville, related_name='destination_voyages') 
     adresse_depart = models.ForeignKey(Adresse, related_name='adresse_depart_voyages', on_delete=models.SET_NULL, null=True, blank=True)  
     date_depart = models.DateField()
     date_retour = models.DateField()
     budget_total = models.DecimalField(max_digits=10, decimal_places=2)
-    type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices)# liste 
+    type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices)# champs normal et aussi tranche d'age 
     date_creation = models.DateTimeField(auto_now_add=True)
     #tranche d'age appel 
     #ligne normal 
