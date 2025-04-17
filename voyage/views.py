@@ -2,6 +2,8 @@ from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework.generics import ListAPIView
+
 
 from .models import CritereVoyage
 from .serializers_voyage  import CritereVoyageSerializer
@@ -41,6 +43,15 @@ class VilleList(APIView):
         return Response(serializer.data)
     
 
+#get ALL adresse 
+class AllAdresses(APIView):
+    def get(self, request):
+        adresses = Adresse.objects.all()
+        serializer = AdresseSerializer(adresses, many=True)
+        return Response(serializer.data)
+
+    
+#get adresse by ville 
 class AdresseList(APIView):
     def get(self, request, ville_nom):
         # Récupérer toutes les adresses associées à la ville spécifiée
