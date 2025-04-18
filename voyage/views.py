@@ -13,6 +13,9 @@ from voyage.models import  JourVoyage ,Activite
 from .models import Pays, Ville ,Adresse
 
 from .serializers_voyage  import PaysSerializer, VilleSerializer ,AdresseSerializer
+from rest_framework import viewsets
+
+from rest_framework import generics
 
 
 
@@ -26,6 +29,9 @@ def recuperer_criteres(request, critere_id):
     critere = get_object_or_404(CritereVoyage, id=critere_id)
     serializer = CritereVoyageSerializer(critere)
     return Response(serializer.data)
+
+
+
 
 
 #  get api 
@@ -62,3 +68,13 @@ class AdresseList(APIView):
         
         # Retourner la réponse avec les adresses sérialisées
         return Response(serializer.data)
+    
+
+
+ #post criteres
+
+class CritereVoyageCreateView(generics.CreateAPIView):
+    serializer_class = CritereVoyageSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()  

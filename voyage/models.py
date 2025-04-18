@@ -36,30 +36,37 @@ class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas
 
 
 class CritereVoyage(models.Model):
-    class TypeVoyage(models.TextChoices):    # liste f front 
-        LOISIR = 'loisir', 'Loisir'
-        AFFAIRES = 'affaires', 'Affaires'
-        FAMILIAL = 'familial', 'Familial'
-        CULTUREL = 'culturel', 'Culturel'
-        AVENTURE = 'aventure', 'Aventure'
-        ROMANTIQUE = 'romantique', 'Romantique'
-        RELIGIEUX = 'religieux', 'Religieux'
+    #class TypeVoyage(models.TextChoices):    # liste f front 
+       # LOISIR = 'loisir', 'Loisir'
+       # AFFAIRES = 'affaires', 'Affaires'
+       # FAMILIAL = 'familial', 'Familial'
+       # CULTUREL = 'culturel', 'Culturel'
+       # AVENTURE = 'aventure', 'Aventure'
+       # ROMANTIQUE = 'romantique', 'Romantique'
+       # RELIGIEUX = 'religieux', 'Religieux'
         
 
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
     pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') 
     ville_destination = models.ManyToManyField(Ville, related_name='destination_voyages') 
-    adresse_depart = models.ForeignKey(Adresse, related_name='adresse_depart_voyages', on_delete=models.SET_NULL, null=True, blank=True)  
+    adresse_depart = models.ForeignKey(Adresse, related_name='adresse_depart_voyages', on_delete=models.SET_NULL, null=True, blank=True) 
+    adresse = models.CharField(max_length=255, blank=True) # avoir juste champs.........
     date_depart = models.DateField()
     date_retour = models.DateField()
     budget_total = models.DecimalField(max_digits=10, decimal_places=2)
-    type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices)# champs normal et aussi tranche d'age 
+    #type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices)# champs normal et aussi tranche d'age 
+    type_voyage = models.CharField(max_length=50, blank=True)
+    voyageurs_enfant = models.PositiveIntegerField(default=0)
+    voyageurs_jeune = models.PositiveIntegerField(default=0)
+    voyageurs_adulte = models.PositiveIntegerField(default=1)
+    voyageurs_senior = models.PositiveIntegerField(default=0)
+
     date_creation = models.DateTimeField(auto_now_add=True)
     #tranche d'age appel 
     #ligne normal 
-    @property   
-    def tranches_age(self):
-        return self.tranches_age_voyageurs.all()
+   # @property   
+   # def tranches_age(self):
+      #  return self.tranches_age_voyageurs.all()
 
 
 
