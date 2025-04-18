@@ -12,7 +12,7 @@ urlpatterns = [
     path('villes/<str:pays_nom>/', VilleList.as_view()),
     path('adresses/<str:ville_nom>/', AdresseList.as_view(), name='adresse-list'),
     path('adresses/', AllAdresses.as_view(), name='adresse-list-all'),
-    path('api/criteres/', CritereVoyageCreateView.as_view(), name='create-critere'),
+    path('criteres/', CritereVoyageCreateView.as_view(), name='create-critere'),
 
 
     
