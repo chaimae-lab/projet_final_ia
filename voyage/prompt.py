@@ -42,6 +42,8 @@ def generer_prompt(critere):
                 "Fournir des alternatives en cas de mauvaise météo"
             ]
         },
+        
+        "obligation_format": "Tu dois répondre uniquement au format JSON strict, sans aucune explication, phrase introductive ou commentaire. Le JSON doit respecter exactement la structure donnée ci-dessous.",
         "format_attendu": {
             "jour1": {
                 "date": "JJ/MM/AAAA",
@@ -77,35 +79,3 @@ def generer_prompt(critere):
 
 
 
-#    Envoyer le prompt à l'API DeepSeek
-
-# ✅ Envoyer le prompt à l'API DeepSeek avec une meilleure gestion des erreurs
-def envoyer_prompt_ia(prompt):
-    """
-    Envoie un prompt à DeepSeek et récupère la réponse sous forme JSON.
-    """
-    headers = {
-        "Authorization": f"Bearer {settings.DEEPSEEK_API_KEY}",  # Vérifie que ta clé API est bien définie
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "model": "deepseek-chat",
-        "messages": [{"role": "user", "content": prompt}],
-        "max_tokens": 1000
-    }
-
-    try:
-        response = requests.post(settings.DEEPSEEK_API_URL, json=payload, headers=headers)
-        response.raise_for_status()  # Lève une exception en cas d'erreur HTTP
-
-        data = response.json()
-
-        # ✅ Vérifier que DeepSeek renvoie bien un JSON valide avec une réponse correcte
-        if "choices" in data and len(data["choices"]) > 0:
-            return data["choices"][0]["message"]["content"]
-        else:
-            print("Erreur : Réponse API mal formatée ou vide.")
-            return None
-    except requests.exceptions.RequestException as e:
-        print(f"Erreur API DeepSeek : {e}")
-        return None  # En cas d'erreur, retourne None
