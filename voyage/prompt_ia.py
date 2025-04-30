@@ -119,6 +119,27 @@ def envoyer_prompt_ia(prompt):
 
 
 
+#envoi le prompt a deppseek mock 
+
+
+def obtenir_reponse_deepseek(prompt):
+    """
+    Gère l'appel à l'IA DeepSeek :
+    - En mode développement (DEBUG=True), utilise une réponse simulée via prompt_ia().
+    - Pas d'appel réel à l'API DeepSeek.
+    
+    Retourne la réponse sous forme de texte (str).
+    """
+
+    if settings.DEBUG:
+        print("🔧 Mode développement activé : utilisation de la réponse mock.")
+        return prompt_ia(prompt)  # Utilisation de la fonction mock pour tester localement
+    else:
+        # On ne fait pas d'appel réel à l'API
+        print("🚀 Appel réel à l'API DeepSeek désactivé.")
+        return None
+
+
     # de test 
 
 def prompt_ia(prompt):
@@ -158,3 +179,11 @@ def prompt_ia(prompt):
     # On retourne la réponse sous forme de texte JSON
     import json
     return json.dumps(fake_response, indent=2)
+
+
+
+
+
+
+
+#  

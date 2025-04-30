@@ -4,6 +4,8 @@ from .views import PaysList, VilleList ,AdresseList
 
 from .views import  AllAdresses 
 from .views import CritereVoyageCreateView
+from .generat_plan import generer_plan_de_voyage
+
 
 
 urlpatterns = [
@@ -13,6 +15,9 @@ urlpatterns = [
     path('adresses/<str:ville_nom>/', AdresseList.as_view(), name='adresse-list'),
     path('adresses/', AllAdresses.as_view(), name='adresse-list-all'),
     path('criteres/', CritereVoyageCreateView.as_view(), name='create-critere'),
+    path('generer-plan/<int:critere_id>/', generer_plan_de_voyage, name='generer_plan'),
+
+    
 
 
     
