@@ -82,8 +82,6 @@ def generat_prompt(critere):
 
 
 
-
-#    Envoyer le prompt à l'API DeepSeek
 # ✅ Envoyer le prompt à l'API DeepSeek avec une meilleure gestion des erreurs
 def envoyer_prompt_ia(prompt):
     """
@@ -95,7 +93,8 @@ def envoyer_prompt_ia(prompt):
     }
     payload = {
         "model": "deepseek-chat",
-        "messages": [{"role": "user", "content": prompt}],
+        "messages": [{"role": "user",
+                       "content": prompt}],
         "max_tokens": 1000
     }
 
@@ -114,12 +113,51 @@ def envoyer_prompt_ia(prompt):
     except requests.exceptions.RequestException as e:
         print(f"Erreur API DeepSeek : {e}")
         return None  # En cas d'erreur, retourne None
-    
 
 
 
 
-#envoi le prompt a deppseek mock 
+
+
+
+#    Envoyer le prompt à l'API DeepSeek gartuit
+
+def envoyer_prompt_ia_gratuit(prompt):
+    """
+    Envoie un prompt à l'API gratuite DeepSeek via puter.com et récupère la réponse.
+    """
+    url = "https://api.puter.com/v1/chat/completions"  # URL gratuite
+
+    headers = {
+        "Content-Type": "application/json",
+       # "Authorization": "Bearer sk-90af164322fd41f3aeabb97f65ecb54a"  
+    }
+
+    payload = {
+        "model": "deepseek-chat",
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 1000
+    }
+
+    try:
+        response = requests.post(url, json=payload, headers=headers)
+        response.raise_for_status()
+        data = response.json()
+
+        if "choices" in data and len(data["choices"]) > 0:
+            return data["choices"][0]["message"]["content"]
+        else:
+            print("Erreur : Réponse vide ou mal formée.")
+            return None
+
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de l'appel API gratuite : {e}")
+        return None
+
+
+
+
+#envoi le prompta deppseek mock 
 
 
 def obtenir_reponse_deepseek(prompt):
@@ -140,7 +178,7 @@ def obtenir_reponse_deepseek(prompt):
         return None
 
 
-    # de test 
+    # de test fonction mock un exemple de plan 
 
 def prompt_ia(prompt):
     """
@@ -175,7 +213,6 @@ def prompt_ia(prompt):
         }
     }
 
-    # On retourne la réponse sous forme de texte JSON
     # On retourne la réponse sous forme de texte JSON
     import json
     return json.dumps(fake_response, indent=2)

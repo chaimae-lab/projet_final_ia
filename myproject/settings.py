@@ -136,7 +136,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
-DEEPSEEK_API_KEY = "sk-76a02df4c3004d069077407bd6feaddf" 
+DEEPSEEK_API_KEY = "sk-90af164322fd41f3aeabb97f65ecb54a" 
 DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 

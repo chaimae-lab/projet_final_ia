@@ -1,8 +1,49 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import CritereVoyage
-from .prompt_ia import generat_prompt, obtenir_reponse_deepseek
+from .prompt_ia import generat_prompt, obtenir_reponse_deepseek, envoyer_prompt_ia
 import json
+from django.core.exceptions import ObjectDoesNotExist
+
+
+#get plan selon id (reel api  )
+
+def plan_voyage(request, critere_id):
+    try:
+        critere = CritereVoyage.objects.get(id=critere_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': 'Critère de voyage non trouvé'}, status=404)
+
+    # Générer le prompt de voyage
+    prompt = generat_prompt(critere)
+
+    # Envoyer le prompt à l'API IA et récupérer la réponse
+    plan_voyage = envoyer_prompt_ia(prompt)
+
+    # Vérifier si la réponse a bien été générée
+    if plan_voyage is None:
+        return JsonResponse({'error': 'Erreur dans la génération du plan de voyage'}, status=500)
+
+    # Renvoi du plan de voyage en format JSON
+    return JsonResponse(plan_voyage, safe=False)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
