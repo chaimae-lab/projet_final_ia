@@ -20,6 +20,9 @@ urlpatterns = [
     path('plan_voyage/<int:critere_id>/', plan_voyage, name='plan_voyage'),
 
 
+
+
+
     
 
 
