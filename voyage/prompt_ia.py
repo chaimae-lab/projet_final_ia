@@ -82,7 +82,7 @@ def generat_prompt(critere):
 
 
 
-# ✅ Envoyer le prompt à l'API DeepSeek avec une meilleure gestion des erreurs
+# ✅ Envoyer le prompt à l'API payante DeepSeek avec une meilleure gestion des erreurs 
 def envoyer_prompt_ia(prompt):
     """
     Envoie un prompt à DeepSeek et récupère la réponse sous forme JSON.
