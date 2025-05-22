@@ -36,15 +36,7 @@ class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas
 
 
 class CritereVoyage(models.Model):
-    #class TypeVoyage(models.TextChoices):    # liste f front 
-       # LOISIR = 'loisir', 'Loisir'
-       # AFFAIRES = 'affaires', 'Affaires'
-       # FAMILIAL = 'familial', 'Familial'
-       # CULTUREL = 'culturel', 'Culturel'
-       # AVENTURE = 'aventure', 'Aventure'
-       # ROMANTIQUE = 'romantique', 'Romantique'
-       # RELIGIEUX = 'religieux', 'Religieux'
-        
+    
 
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
     pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') 
@@ -54,7 +46,7 @@ class CritereVoyage(models.Model):
     date_depart = models.DateField()
     date_retour = models.DateField()
     budget_total = models.DecimalField(max_digits=10, decimal_places=2)
-    #type_voyage = models.CharField(max_length=20,choices=TypeVoyage.choices)# champs normal et aussi tranche d'age 
+    
     type_voyage = models.CharField(max_length=50, blank=True)
     voyageurs_enfant = models.PositiveIntegerField(default=0)
     voyageurs_jeune = models.PositiveIntegerField(default=0)
@@ -62,11 +54,12 @@ class CritereVoyage(models.Model):
     voyageurs_senior = models.PositiveIntegerField(default=0)
 
     date_creation = models.DateTimeField(auto_now_add=True)
-    #tranche d'age appel 
-    #ligne normal 
-   # @property   
-   # def tranches_age(self):
-      #  return self.tranches_age_voyageurs.all()
+    api_choisie = models.CharField(
+        max_length=20,
+        choices=[("deepseek", "DeepSeek"), ("openai", "OpenAI")],
+        default="deepseek"
+    )
+
 
 
 

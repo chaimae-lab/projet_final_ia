@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from .models import CritereVoyage ,PlanVoyage ,Activite ,JourVoyage
-from .prompt_ia import generat_prompt, obtenir_reponse_deepseek, envoyer_prompt_ia
+from .prompt_ia import generat_prompt, obtenir_reponse_deepseek, envoyer_prompt_ia, envoyer_prompt_selon_api
 import json
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.dateparse import parse_time
@@ -12,7 +12,7 @@ from datetime import datetime
 
 
 
-#generer plan de voyage ,stocker dans la base 
+#generer plan de voyage ,stocker dans la base  api deepseek payante (fonction get)
 
 def plan_voyage(request, critere_id):
     try:
@@ -44,6 +44,40 @@ def plan_voyage(request, critere_id):
 
 
 
+
+
+
+
+
+#generer plan de voyage ,stocker dans la base  api deepseek et openIa payante (fonction get)
+def plan_travel(request, critere_id):
+    try:
+        critere = CritereVoyage.objects.get(id=critere_id)
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': 'Critère de voyage non trouvé'}, status=404)
+
+    # Générer le prompt de voyage
+    prompt = generat_prompt(critere)
+
+    # API choisie par l'utilisateur (défaut = deepseek si non précisé)
+    api_choisie = critere.api_choisie if critere.api_choisie else "deepseek"
+
+    # Envoyer le prompt à l'API choisie
+    plan_contenu = envoyer_prompt_selon_api(api_choisie, prompt)
+
+    if plan_contenu is None:
+        return JsonResponse({'error': f'Erreur dans la génération du plan avec {api_choisie}'}, status=500)
+
+    try:
+        # Sauvegarder le plan généré
+        PlanVoyage.objects.create(
+            critere_voyage=critere,
+            contenu_plan=plan_contenu
+        )
+    except Exception as e:
+        return JsonResponse({'error': f'Erreur lors de la sauvegarde du plan de voyage: {str(e)}'}, status=500)
+
+    return JsonResponse(plan_contenu, safe=False)
 
 
 

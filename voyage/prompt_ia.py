@@ -82,7 +82,7 @@ def generat_prompt(critere):
 
 
 
-# ✅ Envoyer le prompt à l'API payante DeepSeek avec une meilleure gestion des erreurs 
+# ✅ Envoyer le prompt à l'API payante DeepSeek 
 def envoyer_prompt_ia(prompt):
     """
     Envoie un prompt à DeepSeek et récupère la réponse sous forme JSON.
@@ -115,6 +115,51 @@ def envoyer_prompt_ia(prompt):
         return None  # En cas d'erreur, retourne None
 
 
+
+
+
+# Envoyer le prompt à l'API DeepSeek et  openIa payante 
+def envoyer_prompt_selon_api(api, prompt):
+    """
+    Envoie le prompt à l'API choisie (deepseek ou openai uniquement).
+    """
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    payload = {
+        "messages": [{"role": "user", "content": prompt}],
+        "max_tokens": 1000
+    }
+
+    if api == "deepseek":
+        headers["Authorization"] = f"Bearer {settings.DEEPSEEK_API_KEY}"
+        payload["model"] = "deepseek-chat"
+        url = settings.DEEPSEEK_API_URL
+
+    elif api == "openai":
+        headers["Authorization"] = f"Bearer {settings.OPENAI_API_KEY}"
+        payload["model"] = "gpt-3.5-turbo"
+        url = "https://api.openai.com/v1/chat/completions"
+
+    else:
+        print("❌ API non supportée :", api)
+        return None
+
+    try:
+        response = requests.post(url, json=payload, headers=headers)
+        response.raise_for_status()
+        data = response.json()
+
+        if "choices" in data and len(data["choices"]) > 0:
+            return data["choices"][0]["message"]["content"]
+        else:
+            print("❌ Réponse vide ou mal formatée de l'API :", api)
+            return None
+
+    except requests.exceptions.RequestException as e:
+        print(f"❌ Erreur réseau avec l'API {api} :", e)
+        return None
 
 
 
