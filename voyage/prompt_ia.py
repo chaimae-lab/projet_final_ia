@@ -3,9 +3,6 @@ import requests
 from django.conf import settings
 
 def generat_prompt(critere):
-    # Vérifier si adresse_depart est définie et non None
-    adresse_depart = critere.adresse_depart.rue if critere.adresse_depart and critere.adresse_depart.rue else "Adresse départ non définie"
-    
     # Vérifier si adresse_arrivee est définie et non None
     adresse_arrivee = critere.adresse if critere.adresse else "Adresse arrivée non définie"
     
@@ -20,7 +17,7 @@ def generat_prompt(critere):
         "details": {
             "destinations": destinations,
             "pays": pays,
-            "adresse_depart": adresse_depart,
+    
             "adresse_arrivee": adresse_arrivee,
             "dates_voyage": f"de {critere.date_depart} à {critere.date_retour}" if critere.date_depart and critere.date_retour else "Dates non définies",
             "type_voyage": critere.type_voyage if critere.type_voyage else "Type de voyage non défini",

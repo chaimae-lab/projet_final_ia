@@ -41,7 +41,6 @@ class CritereVoyage(models.Model):
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
     pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') 
     ville_destination = models.ManyToManyField(Ville, related_name='destination_voyages') 
-    adresse_depart = models.ForeignKey(Adresse, related_name='adresse_depart_voyages', on_delete=models.SET_NULL, null=True, blank=True) 
     adresse = models.CharField(max_length=255, blank=True) # avoir juste champs.........
     date_depart = models.DateField()
     date_retour = models.DateField()
