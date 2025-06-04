@@ -1,4 +1,4 @@
-from django.test import TestCase   #Elle prépare automatiquement une base de données temporaire isolée pour chaque test,
+from django.test import TestCase
 from django.contrib.auth.models import User
 from voyage.models import CritereVoyage, Ville, Pays
 from django.urls import reverse
@@ -6,21 +6,17 @@ from datetime import date, timedelta
 import random
 import string
 
-class PlanVoyageTest(TestCase):
-    def setUp(self):
-        # Création d’un utilisateur fictif
-        self.user = User.objects.create_user(username='user_' + self._random_string(5), password='testpass')
+class TestPlanVoyage(TestCase): 
 
-        # Création d’un pays et d’une ville avec des noms random
+    def setUp(self):
+        self.user = User.objects.create_user(username='user_' + self._random_string(5), password='testpass')
         self.pays = Pays.objects.create(nom='Pays_' + self._random_string(4))
         self.ville = Ville.objects.create(nom='Ville_' + self._random_string(4), pays=self.pays)
 
-        # Dates aléatoires
         today = date.today()
         date_depart = today + timedelta(days=random.randint(1, 30))
         date_retour = date_depart + timedelta(days=random.randint(3, 10))
 
-        # Création d’un CritereVoyage avec données random
         self.critere = CritereVoyage.objects.create(
             utilisateur=self.user,
             adresse="Rue " + self._random_string(6),
@@ -42,5 +38,7 @@ class PlanVoyageTest(TestCase):
 
     def test_generation_plan_voyage(self):
         url = reverse('plan_travel', args=[self.critere.id])
-        response = self.client.get(url)  # GET ou POST selon la vue
+        self.client.force_login(self.user)  # Important si la vue est protégée
+        response = self.client.get(url)
+        print("🧪 Contenu de la réponse :", response.content.decode())
         self.assertEqual(response.status_code, 200)

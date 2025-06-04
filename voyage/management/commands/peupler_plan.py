@@ -42,7 +42,9 @@ class Command(BaseCommand):
             voyageurs_jeune=random.randint(0, 2),
             voyageurs_adulte=random.randint(1, 4),
             voyageurs_senior=random.randint(0, 2),
-            api_choisie="deepseek"
+           # api_choisie="deepseek"
+            api_choisie=random.choice(["deepseek", "openai"])
+
         )
         print("📝 Critère créé :", critere.id)
 
@@ -73,3 +75,6 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS("✅ Plan généré avec succès et critère enregistré."))
         else:
             self.stdout.write(self.style.ERROR(f"❌ Erreur lors de la génération du plan : {response.status_code}"))
+
+
+# execution python manage.py peupler_plan
