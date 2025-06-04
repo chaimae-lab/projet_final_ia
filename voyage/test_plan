@@ -8,18 +8,19 @@ import string
 
 class TestPlanVoyage(TestCase): 
 
-    def setUp(self):
-        self.user = User.objects.create_user(username='user_' + self._random_string(5), password='testpass')
-        self.pays = Pays.objects.create(nom='Pays_' + self._random_string(4))
-        self.ville = Ville.objects.create(nom='Ville_' + self._random_string(4), pays=self.pays)
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create_user(username='user_' + cls._random_string(5), password='testpass')
+        cls.pays = Pays.objects.create(nom='Pays_' + cls._random_string(4))
+        cls.ville = Ville.objects.create(nom='Ville_' + cls._random_string(4), pays=cls.pays)
 
         today = date.today()
         date_depart = today + timedelta(days=random.randint(1, 30))
         date_retour = date_depart + timedelta(days=random.randint(3, 10))
 
-        self.critere = CritereVoyage.objects.create(
-            utilisateur=self.user,
-            adresse="Rue " + self._random_string(6),
+        cls.critere = CritereVoyage.objects.create(
+            utilisateur=cls.user,
+            adresse="Rue " + cls._random_string(6),
             date_depart=date_depart,
             date_retour=date_retour,
             budget_total=random.randint(1000, 5000),
@@ -30,15 +31,20 @@ class TestPlanVoyage(TestCase):
             voyageurs_senior=random.randint(0, 2),
             api_choisie="deepseek"
         )
-        self.critere.ville_destination.add(self.ville)
-        self.critere.pays_arrivee.add(self.pays)
+        cls.critere.ville_destination.add(cls.ville)
+        cls.critere.pays_arrivee.add(cls.pays)
 
-    def _random_string(self, length):
+    @staticmethod
+    def _random_string(length):
         return ''.join(random.choices(string.ascii_letters, k=length))
 
-    def test_generation_plan_voyage(self):
+    def test_plan_voyage_view_returns_200(self):
         url = reverse('plan_travel', args=[self.critere.id])
-        self.client.force_login(self.user)  # Important si la vue est protégée
+        self.client.force_login(self.user)
         response = self.client.get(url)
-        print("🧪 Contenu de la réponse :", response.content.decode())
         self.assertEqual(response.status_code, 200)
+        
+        # Vérifie que le contenu contient une chaîne attendue (optionnel)
+        self.assertIn("Plan", response.content.decode())  # adapte selon ta vue
+
+        # print retiré (nettoyage du code)

@@ -136,7 +136,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
+OPENAI_API_KEY = "sk-svcacct-9vWQjwg59ajxYI9dkck0jjOilMvMzlnTLQFEFmw6H3BfxfIpjunFVPZsQ3SV1TjYV8M5TT3BlbkFJYqiIFwH-xG3So16cLeYwJGzuSq7qFDOseDQA5n_GBWzkwL6iVRhUzM6LUyHgU_wgSucAA"
+OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 
+DEEPSEEK_API_KEY = "sk-90af164322fd41f3aeabb97f65ecb54a" 
+DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 
 # Et ajoute cette ligne pour autoriser toutes les origines (React, Postman, etc.)
