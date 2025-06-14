@@ -18,8 +18,10 @@ from rest_framework import viewsets
 from rest_framework import generics
 
 
-
-
+from django.http import HttpResponse
+#pour le lien de auth
+def home(request):
+    return HttpResponse("Bienvenue sur la page d'accueil !")
 
 
 #   Récupérer un  critères  via son ID.
