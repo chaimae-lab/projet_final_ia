@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-+@#rev%yvjh58g$4urp0khkmqz@-y1#pl$_@!p@r++p!y#90x9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'testserver',"d294-105-71-5-246.ngrok-free.app", ]
 
 
 
@@ -41,12 +41,19 @@ INSTALLED_APPS = [
     'rest_framework',
      'voyage',
      'corsheaders',
+
     'django.contrib.sites',  # Obligatoire pour allauth
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',  # Pour login Facebook
+    'allauth.socialaccount.providers.google',    #pour google 
      
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+
+    'rest_framework.authtoken',  # <-- ajoute cette ligne
+
 ]
 
 SITE_ID = 1
@@ -64,6 +71,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    #
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'allauth.account.middleware.AccountMiddleware',
@@ -163,3 +171,46 @@ DEEPSEEK_API_URL = "https://api.deepseek.com/v1/chat/completions"
 
 # Et ajoute cette ligne pour autoriser toutes les origines (React, Postman, etc.)
 CORS_ALLOW_ALL_ORIGINS = True  
+
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    "facebook": {
+        "METHOD": "oauth2",
+        "SCOPE": [
+            "email",
+            "public_profile",
+           # "pages_show_list",         # pour voir les pages liées à l'utilisateur
+           # "instagram_basic",         # pour accéder à son profil Instagram business
+        ],
+        "AUTH_PARAMS": {"auth_type": "reauthenticate"},
+        "FIELDS": [
+            "id",
+            "email",
+            "name",
+            "first_name",
+            "last_name",
+            "picture"
+        ],
+    }
+}
+
+
+
+
+# avoir   est ce que on garde ou pas 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+
+
+# pour  auth google dans postman 
+REST_USE_JWT = True
+
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_EMAIL_REQUIRED = True

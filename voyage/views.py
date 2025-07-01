@@ -19,9 +19,96 @@ from rest_framework import generics
 
 
 from django.http import HttpResponse
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import render
+################login facebook 
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from dj_rest_auth.registration.views import SocialLoginView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+            #a supp 
+from rest_framework.authentication import BasicAuthentication
+
+from rest_framework.permissions import AllowAny
+@method_decorator(csrf_exempt, name="dispatch")
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter
+
+            # asupp
+    authentication_classes = []  # <-- désactive toutes les authentifications
+    permission_classes = [AllowAny]  # autorise tout le monde
+
+    def dispatch(self, request, *args, **kwargs):
+        print("✅ FacebookLogin called")  # vérifie que cette vue est bien utilisée
+        return super().dispatch(request, *args, **kwargs)
+
 #pour le lien de auth
 def home(request):
     return HttpResponse("Bienvenue sur la page d'accueil !")
+
+
+
+
+
+########google auth 
+# views.py
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from google.oauth2 import id_token
+from google.auth.transport import requests
+from django.contrib.auth.models import User
+from rest_framework_simplejwt.tokens import RefreshToken
+
+class GoogleLoginAPIView(APIView):
+    def post(self, request):
+        token = request.data.get('token')
+        if not token:
+            return Response({'error': 'Token manquant'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            idinfo = id_token.verify_oauth2_token(token, requests.Request(), "TON_CLIENT_ID_GOOGLE")
+
+            email = idinfo.get('email')
+            name = idinfo.get('name', '')
+            if not email:
+                return Response({'error': 'Email non trouvé dans le token'}, status=status.HTTP_400_BAD_REQUEST)
+
+            user, created = User.objects.get_or_create(email=email, defaults={
+                'username': email,
+                'first_name': name,
+            })
+
+            refresh = RefreshToken.for_user(user)
+
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'user': {
+                    'email': user.email,
+                    'username': user.username,
+                }
+            })
+        except ValueError:
+            return Response({'error': 'Token Google invalide'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+#supprimer les donnes pour app dev
+
+
+def delete_data_view(request):
+    return render(request, 'delete_data.html')
+
+#pour supprimer les donnes 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_account(request):
+    user = request.user
+    user.delete()
+    return Response({"message": "Votre compte a été supprimé avec succès."}, status=200)
 
 
 #   Récupérer un  critères  via son ID.
