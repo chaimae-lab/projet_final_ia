@@ -192,13 +192,25 @@ SOCIALACCOUNT_PROVIDERS = {
             "last_name",
             "picture"
         ],
+    },
+
+    "google": {
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        },
+        "OAUTH_PKCE_ENABLED": True,
     }
+
 }
 
 
 
 
-# avoir   est ce que on garde ou pas 
+# avoir   est ce que on garde ou pas ,pour activee jwt
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -212,5 +224,10 @@ REST_FRAMEWORK = {
 REST_USE_JWT = True
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
-ACCOUNT_AUTHENTICATION_METHOD = "email"
-ACCOUNT_EMAIL_REQUIRED = True
+#ACCOUNT_AUTHENTICATION_METHOD = "email"
+#ACCOUNT_EMAIL_REQUIRED = True
+
+
+#ACCOUNT_LOGIN_METHODS = {"email"}
+#Le * veut dire que le champ est obligatoire.
+#ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']

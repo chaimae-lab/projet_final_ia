@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+
 class Pays(models.Model):      
     nom = models.CharField(max_length=100)
 
@@ -18,9 +19,19 @@ class Adresse(models.Model):   # supp relation ville ,, adresse de depart
     ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
 
 
-   # Modèle Voyageur (ancien ProfilVoyageur)
+   # Modèle Voyageur (ancien ProfilVoyageur) 
     
-class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas le rennomer user 
+    #  attend voyageur mach darouru ikon user user ;;;professionnel ,voyageur , 
+
+    #utilisateur , 
+
+# utilisateur professionnel #           drois de creer plusieur profil de sans voyage 
+
+
+#kola utilisateur , bzaf dial user ,, des agence e voyage ,, (kola  agence 233ndha les voyageur dial0 )
+#
+
+class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas le rennomer user (j'ai utilise model utilisateur avec critere ,et ici comme un champs )
     utilisateur = models.OneToOneField(User, on_delete=models.CASCADE)
     telephone = models.CharField(max_length=20, blank=True, null=True)
     date_naissance = models.DateField(blank=True, null=True)
@@ -37,6 +48,7 @@ class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas
 
 class CritereVoyage(models.Model):
     
+    #voyageur = models.ForeignKey(Voyageur, on_delete=models.CASCADE, related_name='voyages') (a voir )
 
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
     pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') 

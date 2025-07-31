@@ -6,7 +6,8 @@ from .views import  AllAdresses
 from .views import CritereVoyageCreateView
 from .generat_plan import generer_plan_de_voyage
 from .generat_plan import plan_voyage ,plan_travel  
- 
+from .views import VoyageurViewSet 
+from rest_framework.routers import DefaultRouter
 
 
 
@@ -22,12 +23,10 @@ urlpatterns = [
     path('plan_voyage/<int:critere_id>/', plan_voyage, name='plan_voyage'),
     path('plan_travel/<int:critere_id>/', plan_travel, name='plan_travel'),
 
-
-
-
-    
-
-
-    
-
 ]
+# Ajout du router pour le ViewSet
+router = DefaultRouter()
+router.register(r'voyageurs', VoyageurViewSet, basename='voyageur')
+
+# Combiner avec les autres routes
+urlpatterns += router.urls

@@ -1,6 +1,35 @@
 from rest_framework import serializers
 from .models import CritereVoyage
-from .models import Pays, Ville , Adresse
+from .models import Pays, Ville , Adresse,Voyageur
+from django.contrib.auth.models import User
+
+
+
+
+
+
+# Serializer pour le modèle User (lié via OneToOneField)
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']  #les champs q'ont veux afficher
+
+
+
+
+class VoyageurSerializer(serializers.ModelSerializer):
+    utilisateur = UserSerializer(read_only=True)  # lecture (affichage)
+    utilisateur_id = serializers.PrimaryKeyRelatedField(  # écriture
+        queryset=User.objects.all(),
+        source='utilisateur',
+        write_only=True
+    )
+
+    class Meta:
+        model = Voyageur
+        fields = ['id', 'utilisateur', 'utilisateur_id', 'telephone', 'date_naissance']
+
+
 
 class CritereVoyageSerializer(serializers.ModelSerializer):
     class Meta:

@@ -3,6 +3,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.generics import ListAPIView
+from rest_framework import viewsets
+
 
 
 from .models import CritereVoyage
@@ -10,9 +12,9 @@ from .serializers_voyage  import CritereVoyageSerializer
 
 from voyage.models import  JourVoyage ,Activite 
 
-from .models import Pays, Ville ,Adresse
+from .models import Pays, Ville ,Adresse  ,Voyageur
 
-from .serializers_voyage  import PaysSerializer, VilleSerializer ,AdresseSerializer
+from .serializers_voyage  import PaysSerializer, VilleSerializer ,AdresseSerializer , VoyageurSerializer
 from rest_framework import viewsets
 
 from rest_framework import generics
@@ -68,7 +70,7 @@ class GoogleLoginAPIView(APIView):
         if not token:
             return Response({'error': 'Token manquant'}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            idinfo = id_token.verify_oauth2_token(token, requests.Request(), "TON_CLIENT_ID_GOOGLE")
+            idinfo = id_token.verify_oauth2_token(token, requests.Request(), "633703049993-h0qc5leo71oqdgl0opejgn1nprhg9u0l.apps.googleusercontent.com")
 
             email = idinfo.get('email')
             name = idinfo.get('name', '')
@@ -109,6 +111,19 @@ def delete_account(request):
     user = request.user
     user.delete()
     return Response({"message": "Votre compte a été supprimé avec succès."}, status=200)
+
+
+
+#gesion voyageur 
+
+from rest_framework import viewsets
+
+class VoyageurViewSet(viewsets.ModelViewSet):
+    queryset = Voyageur.objects.all()
+    serializer_class = VoyageurSerializer
+
+
+
 
 
 #   Récupérer un  critères  via son ID.
