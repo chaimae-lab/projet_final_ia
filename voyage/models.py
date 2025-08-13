@@ -19,20 +19,11 @@ class Adresse(models.Model):   # supp relation ville ,, adresse de depart
     ville = models.ForeignKey(Ville, on_delete=models.CASCADE)
 
 
-   # Modèle Voyageur (ancien ProfilVoyageur) 
-    
-    #  attend voyageur mach darouru ikon user user ;;;professionnel ,voyageur , 
+  
 
-    #utilisateur , 
-
-# utilisateur professionnel #           drois de creer plusieur profil de sans voyage 
-
-
-#kola utilisateur , bzaf dial user ,, des agence e voyage ,, (kola  agence 233ndha les voyageur dial0 )
-#
-
-class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas le rennomer user (j'ai utilise model utilisateur avec critere ,et ici comme un champs )
-    utilisateur = models.OneToOneField(User, on_delete=models.CASCADE)
+class Voyageur(models.Model): 
+    utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)#chaque agence a plusieurs voyageurs ( )
+    #utilisateur = models.OneToOneField(User, on_delete=models.CASCADE)#chaque user a UN seul voyageur.
     telephone = models.CharField(max_length=20, blank=True, null=True)
     date_naissance = models.DateField(blank=True, null=True)
     
@@ -46,11 +37,15 @@ class Voyageur(models.Model): # Pas de conflit avec User de Django   on peux pas
 
 
 
+
+
 class CritereVoyage(models.Model):
     
-    #voyageur = models.ForeignKey(Voyageur, on_delete=models.CASCADE, related_name='voyages') (a voir )
-
     utilisateur = models.ForeignKey(User, on_delete=models.CASCADE)
+   
+    #voyageurs = models.ManyToManyField("Voyageur", related_name="voyages")  # 👈 AJOUT ICI
+
+
     pays_arrivee = models.ManyToManyField(Pays, related_name='pays_arrivee_voyages') 
     ville_destination = models.ManyToManyField(Ville, related_name='destination_voyages') 
     adresse = models.CharField(max_length=255, blank=True) # avoir juste champs.........

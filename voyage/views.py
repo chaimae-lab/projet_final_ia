@@ -121,6 +121,18 @@ from rest_framework import viewsets
 class VoyageurViewSet(viewsets.ModelViewSet):
     queryset = Voyageur.objects.all()
     serializer_class = VoyageurSerializer
+    
+
+# affichage de voyageur selon user connecte 
+from rest_framework import generics, permissions
+
+class VoyageurListAPIView(generics.ListAPIView):
+    serializer_class = VoyageurSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Voyageur.objects.filter(utilisateur=user)
 
 
 

@@ -8,26 +8,23 @@ from django.contrib.auth.models import User
 
 
 
-# Serializer pour le modèle User (lié via OneToOneField)
+# Serializer pour le modèle User 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name']  #les champs q'ont veux afficher
+        fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 
-
-
+# Serializer pour le modèle Voyageur
 class VoyageurSerializer(serializers.ModelSerializer):
-    utilisateur = UserSerializer(read_only=True)  # lecture (affichage)
-    utilisateur_id = serializers.PrimaryKeyRelatedField(  # écriture
-        queryset=User.objects.all(),
-        source='utilisateur',
-        write_only=True
-    )
+    utilisateur = UserSerializer(read_only=True)  # lecture uniquement
 
     class Meta:
         model = Voyageur
-        fields = ['id', 'utilisateur', 'utilisateur_id', 'telephone', 'date_naissance']
+        fields = ['id', 'utilisateur', 'telephone', 'date_naissance']
+
+
+        
 
 
 

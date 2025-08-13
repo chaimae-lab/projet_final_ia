@@ -8,6 +8,7 @@ from .generat_plan import generer_plan_de_voyage
 from .generat_plan import plan_voyage ,plan_travel  
 from .views import VoyageurViewSet 
 from rest_framework.routers import DefaultRouter
+from .views import VoyageurListAPIView
 
 
 
@@ -22,6 +23,8 @@ urlpatterns = [
     path('generer-plan/<int:critere_id>/', generer_plan_de_voyage, name='generer_plan'),
     path('plan_voyage/<int:critere_id>/', plan_voyage, name='plan_voyage'),
     path('plan_travel/<int:critere_id>/', plan_travel, name='plan_travel'),
+    path('mes-voyageurs/', VoyageurListAPIView.as_view(), name='mes-voyageurs'),
+
 
 ]
 # Ajout du router pour le ViewSet
